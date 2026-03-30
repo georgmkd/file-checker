@@ -44,12 +44,12 @@
             border-radius: 15px;
         }
 
-        input[type="file"]::file-selector-button {
+        .file-input-label {
+            display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 15px 40px;
             border-radius: 10px;
-            border: none;
             cursor: pointer;
             font-size: 1.1em;
             font-weight: 600;
@@ -57,21 +57,13 @@
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
-        input[type="file"]::file-selector-button:hover {
+        .file-input-label:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
-        input[type="file"]::file-selector-button:active {
+        .file-input-label:active {
             transform: translateY(0);
-        }
-
-        input[type="file"] {
-            width: 100%;
-            cursor: pointer;
-            font-size: 0.9em;
-            color: #667eea;
-            font-weight: 600;
         }
 
         .upload-subtext {
@@ -85,6 +77,10 @@
             font-weight: 600;
             margin-top: 15px;
             font-size: 1em;
+        }
+
+        input[type="file"] {
+            display: none;
         }
 
         .file-info {
@@ -217,7 +213,11 @@
         <h1>📁 File Upload & Checker</h1>
         
         <div class="upload-area" id="uploadArea">
-            <input type="file" name="file" id="upload" accept="*/*">
+            <label id="file-label" for="file-input" class="file-input-label">
+                Choose File
+            </label>
+            <input type="file" id="file-input" class="hidden" accept="*/*">
+            <p class="selected-file-name" id="file-name-display"></p>
             <div class="upload-subtext">Maximum file size: 10MB</div>
         </div>
 
@@ -254,7 +254,7 @@
 
     <script>
         const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('upload');
+        const fileInput = document.getElementById('file-input');
         const fileInfo = document.getElementById('fileInfo');
         const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -262,6 +262,7 @@
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
+                document.getElementById('file-name-display').textContent = `Selected file: ${file.name}`;
                 handleFile(file);
             }
         });
